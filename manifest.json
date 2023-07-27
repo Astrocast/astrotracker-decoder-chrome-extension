@@ -1,0 +1,15 @@
+{
+  "name": "AstrotrackerDecoder",
+  "description": "Astrotracker payload decoder",
+  "version": "0.1",
+  "manifest_version": 3,
+  "icons": { 
+    "16": "icons/astrocast_icon_16.png",
+    "48": "icons/astrocast_icon_48.png",
+    "128": "icons/astrocast_icon_128.png"
+  },
+  "content_scripts": [{
+    "matches": ["*://*.portal.astrocast.com/Message/Details/*"],
+    "js": ["decoder.js"]
+  }]
+}

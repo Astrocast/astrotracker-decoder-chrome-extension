@@ -1,0 +1,1 @@
+var base64 = document.getElementById("base64");
