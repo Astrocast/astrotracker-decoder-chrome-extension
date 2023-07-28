@@ -1,11 +1,19 @@
 # astrotracker-decoder-chrome-extension
-This is a Chrome extension to decode payload sent by Astrotracker devices into Astrocast portal.
+This is a browser extension to decode payload sent by Astrotracker devices into Astrocast portal.
 
 ## Installation
 1. Clone this repository.
-2. Open Chrome extensions at chrome://extensions/.
-3. Enable developer mode.
-4. Click "load unpacked", select extension folder in the cloned repository directory.
+
+### Chromium-based browsers:
+2. Open Chrome extensions at `chrome://extensions`, or your browser's extension manager.
+3. Enable `Developer mode`.
+4. Click `Load unpacked` and select the `extension` folder of the cloned repository.
+
+### Firefox:
+2. Open `Add-ons debugging tool` at `about:debugging#/runtime/this-firefox`.
+3. Click `Load Temporary Add-on` and select `manifest.json` file in the extension folder of the cloned repository.
+4. Open `Add-on manager` at `about:addons`.
+5. Give permissions to AstrotrackerDecoder extension to access your data for sites in the *://portal.astrocast.com domain.
 
 ## Usage
 - The extension will automatically decode Base64 data in Astrocast portal (https://portal.astrocast.com/Message/Details/*).
