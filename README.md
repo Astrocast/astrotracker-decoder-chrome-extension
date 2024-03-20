@@ -1,5 +1,5 @@
 # astrotracker-decoder-chrome-extension
-This is a browser extension to decode payload sent by Astrotracker devices into Astrocast portal.
+This is a browser extension to decode payload sent by AstroTracker devices into Astrocast portal.
 
 ## Installation
 1. Clone this repository.
@@ -13,15 +13,29 @@ This is a browser extension to decode payload sent by Astrotracker devices into 
 2. Open `Add-ons debugging tool` at `about:debugging#/runtime/this-firefox`.
 3. Click `Load Temporary Add-on` and select `manifest.json` file in the extension folder of the cloned repository.
 4. Open `Add-on manager` at `about:addons`.
-5. Give permissions to AstrotrackerDecoder extension to access your data for sites in the *://portal.astrocast.com domain.
+5. Give permissions to AstroTrackerDecoder extension to access your data for sites in the *://portal.astrocast.com domain.
 
 ## Usage
 - The extension will automatically decode Base64 data in Astrocast portal (https://portal.astrocast.com/Message/Details/*).
-- The extension will try to decode any payload which is either 6 or 20 bytes long, even if it isn't an Astrotracker device.
+- The extension will try to decode any payload which is either 6 or 20 bytes long, even if it isn't an AstroTracker device.
 
 ## Current decoded protocols
 
-### Astrotracker Protocol V1 (6 bytes)
+### AstroTracker Protocol v1 (>=10 bytes)
+
+|Byte offset|Type|Length (Bytes)|Name|Description|Unit|Min|Max|
+|-|-----|-|-----------|---------------------------------|----|--|--|
+|0|uint8|1|Type       |Type of message                  |    |=0x11|
+|1|uint8|1|Battery    |Battery voltage                  |mV  |3000  |5550 |
+|2|int8 |1|Temperature|Temperature                      |°C  |-128  |127  |
+|3|uint8|1|SIV        |Number of GNSS satellites in view|    |0     |255  |
+|4|int16|2|Altitude   |Height above mean sea level      |m   |-32768|32767|
+|6|uint8|1|Accuracy   |Accuracy range of the geolocation|m   |<10   |>2550|
+|7|uint8|1|Heading    |Heading of motion                |°   |0     |358  |
+|8|uint8|1|Speed      |Ground speed                     |km/h|0     |255  |
+|9|uint8|1|Switch     |State of status switch           |    |0     |1    |
+
+### Legacy AstroTracker Protocol v0.1 (6 bytes)
 
 |Byte offset|Type|Length (Bytes)|Name|Description|
 |---|---|---|---|---|
@@ -29,7 +43,7 @@ This is a browser extension to decode payload sent by Astrotracker devices into 
 |1|uint8|1|V Bat|Voltage of the battery in the tracker (multiplied by 10)|
 |2|uint32|4|Timestamp|Epoch of the measurement in UNIX time|
 
-### Astrotracker Protocol V2 (20 bytes)
+### Legacy AstroTracker Protocol v0.2 (20 bytes)
 
 |Byte offset|Type|Length (Bytes)|Name|Description|
 |---|---|---|---|---|
@@ -44,8 +58,8 @@ This is a browser extension to decode payload sent by Astrotracker devices into 
 
 ## Screenshots
 
-### Astrotracker Protocol V1 (6 bytes)
-![Astrotracker Protocol V1](screenshots/screenshot_v1.png)
+### AstroTracker Protocol V1 (6 bytes)
+![AstroTracker Protocol V1](screenshots/screenshot_v1.png)
 
-### Astrotracker Protocol V2 (20 bytes)
-![Astrotracker Protocol V2](screenshots/screenshot_v2.png)
+### AstroTracker Protocol V2 (20 bytes)
+![AstroTracker Protocol V2](screenshots/screenshot_v2.png)
