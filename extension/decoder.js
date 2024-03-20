@@ -16,7 +16,7 @@ const base64_element = document.getElementById("base64");
 // Decode base64 payload data
 const data_encoded = base64_element.innerText;
 const data_decoded = base64ToBase16(data_encoded);
-const bytes = [...window.atob('ETQFCOMBAAAAABIpAg==')].map(c => c.charCodeAt(0));
+const bytes = [...window.atob(data_encoded)].map(c => c.charCodeAt(0));
 
 // AstroTracker v1 protocol - versioned 0x11
 if (bytes.length >= 10 && bytes[0] == 0x11) {
