@@ -35,13 +35,7 @@ This is a browser extension to decode payload sent by AstroTracker devices into 
 |8|uint8|1|Speed      |Ground speed                     |km/h|0     |255  |
 |9|uint8|1|Switch     |State of status switch           |    |0     |1    |
 
-### Legacy AstroTracker Protocol v0.1 (6 bytes)
-
-|Byte offset|Type|Length (Bytes)|Name|Description|
-|---|---|---|---|---|
-|0|int8|1|Temperature|Temperature of the tracker in deg C (1 deg resolution)|
-|1|uint8|1|V Bat|Voltage of the battery in the tracker (multiplied by 10)|
-|2|uint32|4|Timestamp|Epoch of the measurement in UNIX time|
+![AstroTracker Protocol v1](screenshots/screenshot_v1.png)
 
 ### Legacy AstroTracker Protocol v0.2 (20 bytes)
 
@@ -56,10 +50,14 @@ This is a browser extension to decode payload sent by AstroTracker devices into 
 |18|uint8|1|V Bat|Voltage of the battery in the tracker (multiplied by 10)|
 |19|int8|1|Temperature|Temperature of the tracker in deg C (1 deg resolution)|
 
-## Screenshots
+![AstroTracker Protocol v0.2](screenshots/screenshot_v0.2.png)
 
-### AstroTracker Protocol V1 (6 bytes)
-![AstroTracker Protocol V1](screenshots/screenshot_v1.png)
+### Legacy AstroTracker Protocol v0.1 (6 bytes)
 
-### AstroTracker Protocol V2 (20 bytes)
-![AstroTracker Protocol V2](screenshots/screenshot_v2.png)
+|Byte offset|Type|Length (Bytes)|Name|Description|
+|---|---|---|---|---|
+|0|int8|1|Temperature|Temperature of the tracker in deg C (1 deg resolution)|
+|1|uint8|1|V Bat|Voltage of the battery in the tracker (multiplied by 10)|
+|2|uint32|4|Timestamp|Epoch of the measurement in UNIX time|
+
+![AstroTracker Protocol v0.1](screenshots/screenshot_v0.1.png)
