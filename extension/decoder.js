@@ -18,8 +18,10 @@ const data_encoded = base64_element.innerText;
 const data_decoded = base64ToBase16(data_encoded);
 const bytes = [...window.atob(data_encoded)].map(c => c.charCodeAt(0));
 
-// AstroTracker v1 protocol - versioned 0x11
-if (bytes.length >= 10 && bytes[0] == 0x11) {
+let messageHtml = '';
+
+// AstroTracker v1 protocol - between 10 and 13 bytes - versioned 0x11
+if (bytes.length >= 10 && bytes.length <= 13 && bytes[0] == 0x11) {
   let batt = (bytes[1] * 10) + 3000;
   let temp = bytes[2] << 24 >> 24; // signed 8-bit
   let siv = bytes[3];
@@ -29,35 +31,36 @@ if (bytes.length >= 10 && bytes[0] == 0x11) {
   let gspeed = bytes[8];
 
   // Update DOM element's inner HTML with decoded data
-  base64_element.innerHTML += " \
-    <br /><br /><b>AstroTracker Protocol v1</b> \
-    <br />------------------------ \
-    <br />Battery voltage = " + batt + " mV \
-    <br />Temperature = " + temp + " °C \
-    <br />Satellites in view = " + siv + " \
-    <br />Altitude = " + altitude + " m \
-    <br />Accuracy = <" + accuracy + " m \
-    <br />Heading = " + heading + "° \
-    <br />Ground speed = " + gspeed + " km/h";
+  messageHtml = "<b>AstroTracker Protocol v1</b>" +
+    "<br />------------------------" +
+    `<br />Battery = ${batt} mV` +
+    `<br />Temperature = ${temp} °C` +
+    `<br />Satellites in view = ${siv}` +
+    `<br />Altitude = ${altitude} m` +
+    `<br />Accuracy = <${accuracy} m` +
+    `<br />Heading = ${heading}°` +
+    `<br />Ground speed = ${gspeed} km/h` +
+    `<br />State = ${bytes[9]}`
+  // Raw value of optional reserved bytes
+  for (i = 10; i < bytes.length; i++)
+    messageHtml += `<br />Reserved${i - 9} = ${'0x' + bytes[i].toString(16).padStart(2, '0')} (${bytes[i]})`;
 
 // AstroTracker Protocol v0.1 - 6 bytes
 } else if (data_decoded.length === 12) {
   let temp = Number.parseInt(data_decoded.slice(0, 2), 16);
   let batt = Number.parseInt(data_decoded.slice(2, 4), 16) / 10;
-  let date = new Date(Number.parseInt(data_decoded.slice(4, 12).match(/[a-fA-F0-9]{2}/g).reverse().join(""), 16) * 1000).toUTCString();
+  let date = new Date(Number.parseInt(data_decoded.slice(4, 12).match(/[a-fA-F0-9]{2}/g).reverse().join(""), 16) * 1000).toISOString();
 
-  // Update DOM element's inner HTML with decoded data
-  base64_element.innerHTML += " \
-    <br /><br /><b>AstroTracker Protocol v0.1</b> \
-    <br />------------------------ \
-    <br />Date = " + date + " \
-    <br />Battery voltage = " + batt + "V \
-    <br />Temperature = " + temp + "°C";
+  messageHtml = "<b>AstroTracker Protocol v0.1</b>" +
+    "<br />--------------------------" +
+    `<br />Date = ${date}` +
+    `<br />Battery = ${batt} V` +
+    `<br />Temperature = ${temp} °C`;
 
 // AstroTracker protocol v0.2 - 20 bytes LOGGER_TAG_PVT_SLOT
 } else if (data_decoded.length === 40) {
   let slot = Number.parseInt(data_decoded.slice(0, 2), 16);
-  let date = new Date(Number.parseInt(data_decoded.slice(2, 10).match(/[a-fA-F0-9]{2}/g).reverse().join(""), 16) * 1000).toUTCString();
+  let date = new Date(Number.parseInt(data_decoded.slice(2, 10).match(/[a-fA-F0-9]{2}/g).reverse().join(""), 16) * 1000).toISOString();
   let lat = Number.parseInt(data_decoded.slice(10, 18).match(/[a-fA-F0-9]{2}/g).reverse().join(""), 16) * 1e-07;
   let lon = Number.parseInt(data_decoded.slice(18, 26).match(/[a-fA-F0-9]{2}/g).reverse().join(""), 16) * 1e-07;
   let siv = Number.parseInt(data_decoded.slice(26, 28), 16);
@@ -66,15 +69,18 @@ if (bytes.length >= 10 && bytes[0] == 0x11) {
   let temp = Number.parseInt(data_decoded.slice(38, 40), 16);
 
   // Update DOM element's inner HTML with decoded data
-  base64_element.innerHTML += " \
-    <br /><br /><b>AstroTracker Protocol v0.2</b> \
-    <br />------------------------ \
-    <br />Slot tag = " + slot + " \
-    <br />Date = " + date + " \
-    <br />Latitude = " + lat + " \
-    <br />Longitude = " + lon + " \
-    <br />Satellites in view = " + siv + " \
-    <br />Ground speed = " + gspeed + "km/h \
-    <br />Battery voltage = " + batt + "V \
-    <br />Temperature = " + temp + "°C";
+  messageHtml = "<b>AstroTracker Protocol v0.2</b>" +
+    "<br />--------------------------" +
+    `<br />Slot tag = ${slot}` +
+    `<br />Date = ${date}` +
+    `<br />Latitude = ${lat}` +
+    `<br />Longitude = ${lon}` +
+    `<br />Satellites in view = ${siv}` +
+    `<br />Ground speed = ${gspeed} km/h` +
+    `<br />Battery = ${batt} V` +
+    `<br />Temperature = ${temp} °C`;
 }
+
+// Replace "Text" element's inner HTML with decoded data
+if (messageHtml)
+  document.getElementById("text").innerHTML = messageHtml;
