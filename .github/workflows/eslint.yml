@@ -13,6 +13,8 @@ on:
   push:
     paths:
       - '**.js'  
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   eslint:
