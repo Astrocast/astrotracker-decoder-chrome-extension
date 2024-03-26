@@ -1,4 +1,7 @@
 # astrotracker-decoder-chrome-extension
+
+![ESLint workflow](https://github.com/Astrocast/astrotracker-decoder-chrome-extension/actions/workflows/eslint.yml/badge.svg)
+
 This is a browser extension to decode payload sent by AstroTracker devices into Astrocast portal.
 
 ## Installation

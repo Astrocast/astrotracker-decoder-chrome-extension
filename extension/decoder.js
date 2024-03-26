@@ -42,7 +42,7 @@ if (bytes.length >= 10 && bytes.length <= 13 && bytes[0] == 0x11) {
     `<br />Ground speed = ${gspeed} km/h` +
     `<br />State = ${bytes[9]}`
   // Raw value of optional reserved bytes
-  for (i = 10; i < bytes.length; i++)
+  for (let i = 10; i < bytes.length; i++)
     messageHtml += `<br />Reserved${i - 9} = ${'0x' + bytes[i].toString(16).padStart(2, '0')} (${bytes[i]})`;
 
 // AstroTracker Protocol v0.1 - 6 bytes
